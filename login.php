@@ -23,7 +23,7 @@ $result = $conn->query($sql);
 
 // Si el usuario no existe, devuelve un error
 if ($result->num_rows == 0) {
-  $response = array('status' => 'error', 'message' => 'Nombre de usuario o contraseña incorrectos');
+  $response = array('status' => 'error', 'message' => 'Nombre de usuario incorrecto');
   header('Content-Type: application/json');
   echo json_encode($response);
   exit;
@@ -38,9 +38,11 @@ if (password_verify($password, $row['password'])) {
   $response = array('status' => 'success', 'message' => 'Inicio de sesión exitoso');
   header('Content-Type: application/json');
   echo json_encode($response);
-} else {
+} 
+
+  else {
   // Si la contraseña es incorrecta, devuelve un error
-  $response = array('status' => 'error', 'message' => 'Nombre de usuario o contraseña incorrectos');
+  $response = array('status' => 'error', 'message' => 'Contraseña incorrecta');
   header('Content-Type: application/json');
   echo json_encode($response);
 }
