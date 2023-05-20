@@ -3,7 +3,7 @@
 class Conexion {
 	
  public function getConexion(){
-   $host = "localhost";  //127.0.0.1 0 localhost
+   $host = "localhost";  // localhost -> 127.0.0.1
    $db = "users_api";      //base de datos de mysql
    $user = "root";       // usuario de mysql
    $password = "";       //contraseña de mysql
