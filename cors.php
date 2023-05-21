@@ -4,4 +4,4 @@ header("Access-Control-Allow-Headers: X-API-KEY, Origin, Authorization,X-Request
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 
- ?>
+?>

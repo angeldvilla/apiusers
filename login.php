@@ -1,52 +1,35 @@
 <?php
-// Conexión a la base de datos MySQL
-$host = "localhost";
-$username = "root";
-$password = "";
-$dbname = "users_api";
+require_once('cors.php');
+header('Content-Type: application/json');
 
-$conn = new mysqli($host, $username, $password, $dbname);
-
-// Verifica la conexión
-if ($conn->connect_error) {
-  die("Error al conectar a la base de datos: " . $conn->connect_error);
-}
-
-// Obtiene los datos de la solicitud POST
+// Obtener los datos enviados por POST
 $data = json_decode(file_get_contents('php://input'), true);
 $username = $data['username'];
 $password = $data['password'];
 
-// Busca el usuario en la base de datos
-$sql = "SELECT * FROM users WHERE username = '$username'";
-$result = $conn->query($sql);
+// Conectar a la base de datos
+$mysqli = new mysqli('localhost', 'root', '', 'users_api');
 
-// Si el usuario no existe, devuelve un error
-if ($result->num_rows == 0) {
-  $response = array('status' => 'error', 'message' => 'Nombre de usuario incorrecto');
-  header('Content-Type: application/json');
-  echo json_encode($response);
-  exit;
+// Verificar si hay errores de conexión
+if ($mysqli->connect_errno) {
+  $response = array('status' => 'error', 'message' => 'Error connecting to the database');
+} else {
+  // Consultar la base de datos para verificar las credenciales del usuario
+  $stmt = $mysqli->prepare('SELECT * FROM users WHERE username = ? AND password = ?');
+  $stmt->bind_param('ss', $username, $password);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  if ($result->num_rows === 1) {
+    $response = array('status' => 'success', 'message' => 'Login successful');
+  } else {
+    $response = array('status' => 'error', 'message' =>'Incorrect data, try again!');
+  }
+
+  // Cerrar la conexión a la base de datos
+  $stmt->close();
+  $mysqli->close();
 }
 
-// Obtiene la fila del usuario
-$row = $result->fetch_assoc();
-
-// Verifica la contraseña del usuario
-if (password_verify($password, $row['password'])) {
-  // Si la contraseña es correcta, devuelve un mensaje de éxito
-  $response = array('status' => 'success', 'message' => 'Inicio de sesión exitoso');
-  header('Content-Type: application/json');
-  echo json_encode($response);
-} 
-
-  else {
-  // Si la contraseña es incorrecta, devuelve un error
-  $response = array('status' => 'error', 'message' => 'Contraseña incorrecta');
-  header('Content-Type: application/json');
-  echo json_encode($response);
-}
-
-// Cierra la conexión a la base de datos
-$conn->close();
-?>
+// Devolver la respuesta como JSON
+echo json_encode($response);
