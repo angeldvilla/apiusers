@@ -6,7 +6,6 @@ require_once('cors.php');
 //obteniedo el metodo http
 $method = $_SERVER['REQUEST_METHOD'];
 
-
 //METODO PARA TRAER USUARIOS
 if($method == "GET") {
    if(!empty($_GET['id_user'])){
