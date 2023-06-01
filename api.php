@@ -12,13 +12,13 @@ public function getUsers(){
      $consulta->execute();
      while($fila = $consulta->fetch()) {
         $vector[] = array(
-            " id_user " => $fila['id_user'],
-            " username " => $fila['username'],
-            " password " =>  $fila['password'],
-            " name " =>  $fila['name'],
-            " lastname " =>  $fila['lastname'],
-            " email " =>  $fila['email'],
-            " cellphone " =>  $fila['cellphone'],
+            "id_user" => $fila['id_user'],
+            "username" => $fila['username'],
+            "password" =>  $fila['password'],
+            "name" =>  $fila['name'],
+            "lastname" =>  $fila['lastname'],
+            "email" =>  $fila['email'],
+            "cellphone" =>  $fila['cellphone'],
         ); }
 
      return $vector;
